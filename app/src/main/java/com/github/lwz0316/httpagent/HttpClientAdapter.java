@@ -9,12 +9,13 @@ import java.util.Map;
 public interface HttpClientAdapter {
 
     /**
+     * @param async  是否为异步请求。 true 异步请求(async)，否则为同步请求(sync)
      * @param method {@link HttpMethod}
      * @param url
      * @param params
      * @param response
      */
-    void request(int method, String url, Map<String, ?> params, Response<?> response);
+    void request(boolean async, int method, String url, Map<String, ?> params, Response<?> response);
 
     /**
      * 取消请求
