@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_clean" android:title="Clean Console" android:onClick="doCleanConsole"/>
+    <item android:id="@+id/menu_http_get" android:title="GET" android:onClick="doGet"/>
+    <item android:id="@+id/menu_http_post" android:title="POST" android:onClick="doPost"/>
+</menu>
