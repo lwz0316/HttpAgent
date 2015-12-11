@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         mConsole = (TextView) findViewById(R.id.console);
 
 
-
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("code", 1);
         params.put("sex", "M");

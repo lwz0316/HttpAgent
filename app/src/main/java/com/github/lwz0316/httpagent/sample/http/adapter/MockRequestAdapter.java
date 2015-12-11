@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.github.lwz0316.httpagent.Header;
 import com.github.lwz0316.httpagent.HttpMethod;
-import com.github.lwz0316.httpagent.HttpClientAdapter;
+import com.github.lwz0316.httpagent.RequestAdapter;
 import com.github.lwz0316.httpagent.Response;
 import com.google.gson.Gson;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by liuwenzhu on 2015/12/10.
  */
-public class MockHttpClientAdapter implements HttpClientAdapter<StringBuffer> {
+public class MockRequestAdapter implements RequestAdapter<StringBuffer> {
 
     Object tag;
     StringBuffer sb = new StringBuffer();

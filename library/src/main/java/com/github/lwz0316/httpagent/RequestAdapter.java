@@ -8,7 +8,7 @@ import java.util.Map;
  * 请求接口适配器
  * <p>将不同的Http请求类，通过适配器来转换为统一的接口，供 {@link HttpAgent} 调用</p>
  */
-public interface HttpClientAdapter<T> {
+public interface RequestAdapter<T> {
 
     /**
      * @param context

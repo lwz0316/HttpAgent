@@ -14,10 +14,10 @@ public class Config {
     private int socketTimeout = DEFAULT_SOCKET_TIMEOUT;
     private int maxConnections = DEFAULT_MAX_CONNECTIONS;
     private int retryTimes = DEFAULT_RETRY_TIMES;
-    private HttpClientAdapter httpClientAdapter;
+    private RequestAdapter requestAdapter;
 
-    public Config(HttpClientAdapter httpClientAdapter) {
-        this.httpClientAdapter = httpClientAdapter;
+    public Config(RequestAdapter requestAdapter) {
+        this.requestAdapter = requestAdapter;
     }
 
     public Config setConnectTimeout(int connectTimeout) {

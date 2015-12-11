@@ -14,7 +14,7 @@ import java.util.Map;
 public class HttpAgent {
 
     private Context mContext;
-    private HttpClientAdapter mHttpClientAdapter;
+    private RequestAdapter mRequestAdapter;
     private String mUrl;
     private Header[] mHeaders;
     private Map<String, ?> mParams;
@@ -23,7 +23,7 @@ public class HttpAgent {
 
     private HttpAgent(Builder builder) {
         mContext = builder.context;
-        mHttpClientAdapter = builder.httpClientAdapter;
+        mRequestAdapter = builder.requestAdapter;
         mUrl = builder.url;
         mParams = builder.params;
         mResponse = builder.response;
@@ -35,7 +35,7 @@ public class HttpAgent {
                 : headers.toArray(new Header[headers.size()]) );
     }
 
-    public HttpClientAdapter getDefaultRequestAdapter() {
+    public RequestAdapter getDefaultRequestAdapter() {
         // TODO
         return null;
     }
@@ -49,26 +49,26 @@ public class HttpAgent {
     }
 
     public void execute(HttpMethod method) {
-        mHttpClientAdapter.request(mContext, mTarget, true, method, mUrl, mHeaders, mParams, mResponse);
+        mRequestAdapter.request(mContext, mTarget, true, method, mUrl, mHeaders, mParams, mResponse);
     }
 
-    public HttpClientAdapter getRequestAdapter() {
-        return mHttpClientAdapter;
+    public RequestAdapter getRequestAdapter() {
+        return mRequestAdapter;
     }
 
     public static final class Builder {
 
         private Context context;
-        private HttpClientAdapter httpClientAdapter;
+        private RequestAdapter requestAdapter;
         private String url;
         private ArrayList<Header> headers;
         private Map<String, Object> params;
         private Response response;
         private Object tag;
 
-        public Builder(@NonNull Context context, @NonNull HttpClientAdapter httpClientAdapter, @NonNull String url) {
+        public Builder(@NonNull Context context, @NonNull RequestAdapter requestAdapter, @NonNull String url) {
             this.context = context;
-            this.httpClientAdapter = httpClientAdapter;
+            this.requestAdapter = requestAdapter;
             this.url = url;
         }
 

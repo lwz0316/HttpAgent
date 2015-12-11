@@ -5,7 +5,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.github.lwz0316.httpagent.Header;
-import com.github.lwz0316.httpagent.HttpClientAdapter;
+import com.github.lwz0316.httpagent.RequestAdapter;
 import com.github.lwz0316.httpagent.HttpMethod;
 import com.github.lwz0316.httpagent.HttpUrlUtils;
 import com.github.lwz0316.httpagent.impl.SafeResponseWrapper;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by liuwenzhu on 2015/12/11.
  */
-public abstract class BaseOkHttpAdapter implements HttpClientAdapter<OkHttpClient> {
+public abstract class BaseOkHttpAdapter implements RequestAdapter<OkHttpClient> {
 
     private static OkHttpClient sOKOkHttpClient;
     private Object mRequestTag;
