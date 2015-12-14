@@ -9,7 +9,10 @@ import android.widget.TextView;
 import com.github.lwz0316.httpagent.Header;
 import com.github.lwz0316.httpagent.HttpAgent;
 import com.github.lwz0316.httpagent.Response;
+import com.github.lwz0316.httpagent.impl.JsonResponseHandler;
 import com.github.lwz0316.httpagent.sample.http.adapter.FormOkHttpAdapter;
+import com.github.lwz0316.httpagent.sample.http.adapter.MockJsonRequestAdapter;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +73,40 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .tag("TARGET").build();
+
+        mAgent = new HttpAgent.Builder(this, "")
+                .requestAdapter(new MockJsonRequestAdapter())
+                .response(new JsonResponseHandler<People>() {
+
+                    @Override
+                    public void onStart() {
+                        printLogToConsole("onStart ----");
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        printLogToConsole("onError ----");
+                        printLogToConsole(t);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        printLogToConsole("onComplete ----");
+                    }
+
+                    @Override
+                    public void onParseSuccess(People result, byte[] responseBody) {
+                        printLogToConsole("onParseSuccess ----");
+                        printLogToConsole(new Gson().toJson(result));
+                    }
+
+                    @Override
+                    public void onParseError(Throwable t) {
+                        printLogToConsole("onParseError ----");
+                        printLogToConsole(t);
+                    }
+                })
+                .build();
 
     }
 

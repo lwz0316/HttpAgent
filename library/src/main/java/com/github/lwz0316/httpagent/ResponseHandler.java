@@ -6,7 +6,7 @@ package com.github.lwz0316.httpagent;
  * @param <E> 服务器返回的数据类型
  * @param <T> 期望的解析数据类型
  */
-public interface ResponseHandler<E, T>  extends Response {
+public interface ResponseHandler<E, T> extends Response {
 
     /**
      * 解析成功
