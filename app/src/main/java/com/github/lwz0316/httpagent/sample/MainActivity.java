@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         params.put("code", 1);
         params.put("sex", "M");
 
-        mAgent = new HttpAgent.Builder(this, new FormOkHttpAdapter(), "http://www.baidu.com")
+        HttpAgent.setDefaultRequestAdapter(new FormOkHttpAdapter());
+
+        mAgent = new HttpAgent.Builder(this, "http://m.baidu.com")
                 .header("multi", "header1")
                 .header(new Header("multi", "header2"))
                 .headers(new Header("multi", "header3"), new Header("multi", "header4"))

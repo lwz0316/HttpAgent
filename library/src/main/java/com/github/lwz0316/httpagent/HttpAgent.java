@@ -21,13 +21,18 @@ public class HttpAgent {
     private Response mResponse;
     private Object mTarget;
 
+    private static RequestAdapter sDefaultRequestAdapter;
+
     private HttpAgent(Builder builder) {
         mContext = builder.context;
-        mRequestAdapter = builder.requestAdapter;
         mUrl = builder.url;
         mParams = builder.params;
         mResponse = builder.response;
         mTarget = builder.tag;
+
+        mRequestAdapter = builder.requestAdapter != null
+                ? builder.requestAdapter
+                : sDefaultRequestAdapter;
 
         final List<Header> headers = builder.headers;
         mHeaders = ( headers == null
@@ -35,13 +40,12 @@ public class HttpAgent {
                 : headers.toArray(new Header[headers.size()]) );
     }
 
-    public RequestAdapter getDefaultRequestAdapter() {
-        // TODO
-        return null;
+    public static void setDefaultRequestAdapter(RequestAdapter requestAdapter) {
+        sDefaultRequestAdapter = requestAdapter;
     }
 
     public void get() {
-       execute(HttpMethod.GET);
+        execute(HttpMethod.GET);
     }
 
     public void post() {
@@ -49,7 +53,11 @@ public class HttpAgent {
     }
 
     public void execute(HttpMethod method) {
-        mRequestAdapter.request(mContext, mTarget, true, method, mUrl, mHeaders, mParams, mResponse);
+        execute(method, true);
+    }
+
+    public void execute(HttpMethod method, boolean async) {
+        mRequestAdapter.request(mContext, mTarget, async, method, mUrl, mHeaders, mParams, mResponse);
     }
 
     public RequestAdapter getRequestAdapter() {
@@ -66,10 +74,14 @@ public class HttpAgent {
         private Response response;
         private Object tag;
 
-        public Builder(@NonNull Context context, @NonNull RequestAdapter requestAdapter, @NonNull String url) {
+        public Builder(@NonNull Context context, @NonNull String url) {
             this.context = context;
-            this.requestAdapter = requestAdapter;
             this.url = url;
+        }
+
+        public Builder requestAdapter(RequestAdapter requestAdapter) {
+            this.requestAdapter = requestAdapter;
+            return this;
         }
 
         public Builder header(String key, String value) {
