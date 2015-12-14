@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.github.lwz0316.httpagent.Header;
 import com.github.lwz0316.httpagent.HttpAgent;
-import com.github.lwz0316.httpagent.Response;
 import com.github.lwz0316.httpagent.impl.JsonResponseHandler;
 import com.github.lwz0316.httpagent.sample.http.adapter.FormOkHttpAdapter;
 import com.github.lwz0316.httpagent.sample.http.adapter.MockJsonRequestAdapter;
@@ -37,44 +36,47 @@ public class MainActivity extends AppCompatActivity {
 
         HttpAgent.setDefaultRequestAdapter(new FormOkHttpAdapter());
 
-        mAgent = new HttpAgent.Builder(this, "http://m.baidu.com")
-                .header("multi", "header1")
-                .header(new Header("multi", "header2"))
-                .headers(new Header("multi", "header3"), new Header("multi", "header4"))
-                .header(new Header("contentType", "application/json"))
-                .header(new Header("charset", "utf-8"))
-                .param("username", "lwz")
-                .param("pwd", "xxxxxx")
-                .params(params)
-                .response(new Response() {
-                    @Override
-                    public void onStart() {
-                        printLogToConsole("onStart ----");
-                    }
+//        mAgent = new HttpAgent.Builder(this, "http://m.baidu.com")
+//                .header("multi", "header1")
+//                .header(new Header("multi", "header2"))
+//                .headers(new Header("multi", "header3"), new Header("multi", "header4"))
+//                .header(new Header("contentType", "application/json"))
+//                .header(new Header("charset", "utf-8"))
+//                .param("username", "lwz")
+//                .param("pwd", "xxxxxx")
+//                .params(params)
+//                .response(new Response() {
+//                    @Override
+//                    public void onStart() {
+//                        printLogToConsole("onStart ----");
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, byte[] data) {
+//                        printLogToConsole("onSuccess ----");
+//                        printLogToConsole(statusCode);
+//                        printLogToConsole(formatHeader(headers));
+//                        printLogToConsole("RESPONSE DATA ----");
+//                        printLogToConsole(new String(data));
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable t) {
+//                        printLogToConsole("onError ----");
+//                        printLogToConsole(t);
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        printLogToConsole("onComplete ----");
+//                    }
+//                })
+//                .tag("TARGET").build();
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-                        printLogToConsole("onSuccess ----");
-                        printLogToConsole(statusCode);
-                        printLogToConsole(formatHeader(headers));
-                        printLogToConsole("RESPONSE DATA ----");
-                        printLogToConsole(new String(data));
-                    }
+    }
 
-                    @Override
-                    public void onError(Throwable t) {
-                        printLogToConsole("onError ----");
-                        printLogToConsole(t);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        printLogToConsole("onComplete ----");
-                    }
-                })
-                .tag("TARGET").build();
-
-        mAgent = new HttpAgent.Builder(this, "")
+    private HttpAgent createHttpAgent() {
+        return mAgent = new HttpAgent.Builder(this, "")
                 .requestAdapter(new MockJsonRequestAdapter())
                 .response(new JsonResponseHandler<People>() {
 
@@ -107,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .build();
-
     }
 
     @Override
@@ -126,10 +127,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doGet(MenuItem item) {
-        mAgent.get();
+        if (mAgent != null) {
+            mAgent.getRequestAdapter().cancelRequest();
+        }
+        createHttpAgent().get();
     }
     public void doPost(MenuItem item) {
-        mAgent.post();
+        if (mAgent != null) {
+            mAgent.getRequestAdapter().cancelRequest();
+        }
+        createHttpAgent().post();
     }
 
     @Override
