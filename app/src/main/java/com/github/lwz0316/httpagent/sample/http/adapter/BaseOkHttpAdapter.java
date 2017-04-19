@@ -1,13 +1,12 @@
 package com.github.lwz0316.httpagent.sample.http.adapter;
 
-import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
 
 import com.github.lwz0316.httpagent.Header;
-import com.github.lwz0316.httpagent.RequestAdapter;
 import com.github.lwz0316.httpagent.HttpMethod;
 import com.github.lwz0316.httpagent.HttpUrlUtils;
+import com.github.lwz0316.httpagent.RequestAdapter;
 import com.github.lwz0316.httpagent.impl.SafeResponseWrapper;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Headers;
@@ -28,7 +27,7 @@ public abstract class BaseOkHttpAdapter implements RequestAdapter<OkHttpClient> 
     private Object mRequestTag;
 
     @Override
-    public void request(Context context, Object tag, boolean async, HttpMethod method, String url, Header[] headers, Map<String, ?> params, com.github.lwz0316.httpagent.Response response) {
+    public void request(Object tag, boolean async, HttpMethod method, String url, Header[] headers, Map<String, ?> params, com.github.lwz0316.httpagent.Response response) {
         mRequestTag = tag;
 
         String originUrl;
@@ -93,7 +92,9 @@ public abstract class BaseOkHttpAdapter implements RequestAdapter<OkHttpClient> 
 
     @Override
     public void cancelRequest() {
-        getHttpClient().cancel(mRequestTag);
+        if (mRequestTag != null) {
+            getHttpClient().cancel(mRequestTag);
+        }
     }
 
     @Override

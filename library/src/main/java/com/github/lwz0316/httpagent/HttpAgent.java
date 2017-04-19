@@ -1,6 +1,5 @@
 package com.github.lwz0316.httpagent;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.Map;
  */
 public class HttpAgent {
 
-    private Context mContext;
     private RequestAdapter mRequestAdapter;
     private String mUrl;
     private Header[] mHeaders;
@@ -24,7 +22,6 @@ public class HttpAgent {
     private static RequestAdapter sDefaultRequestAdapter;
 
     private HttpAgent(Builder builder) {
-        mContext = builder.context;
         mUrl = builder.url;
         mParams = builder.params;
         mResponse = builder.response;
@@ -57,7 +54,7 @@ public class HttpAgent {
     }
 
     public void execute(HttpMethod method, boolean async) {
-        mRequestAdapter.request(mContext, mTarget, async, method, mUrl, mHeaders, mParams, mResponse);
+        mRequestAdapter.request(mTarget, async, method, mUrl, mHeaders, mParams, mResponse);
     }
 
     public RequestAdapter getRequestAdapter() {
@@ -66,7 +63,6 @@ public class HttpAgent {
 
     public static final class Builder {
 
-        private Context context;
         private RequestAdapter requestAdapter;
         private String url;
         private ArrayList<Header> headers;
@@ -74,8 +70,7 @@ public class HttpAgent {
         private Response response;
         private Object tag;
 
-        public Builder(@NonNull Context context, @NonNull String url) {
-            this.context = context;
+        public Builder(@NonNull String url) {
             this.url = url;
         }
 

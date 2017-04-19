@@ -1,6 +1,6 @@
 package com.github.lwz0316.httpagent;
 
-import com.github.lwz0316.httpagent.exection.ParseExection;
+import com.github.lwz0316.httpagent.exection.ParseException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -25,7 +25,7 @@ public final class TypeUtil {
      * @return
      * @throws Exception 若没有使用匿名内部类，则调用该方法时会抛出异常
      */
-    public static Type getGenericType(Class<?> clazz) throws ParseExection {
+    public static Type getGenericType(Class<?> clazz) throws ParseException {
         return getGenericType(clazz, 0);
     }
 
@@ -39,13 +39,13 @@ public final class TypeUtil {
      * @return
      * @throws Exception 若没有使用匿名内部类，则调用该方法时会抛出异常
      */
-    public static Type getGenericType(Class<?> clazz, int index) throws ParseExection {
+    public static Type getGenericType(Class<?> clazz, int index) throws ParseException {
         Type mySuperClass = clazz.getGenericSuperclass();
         try {
             Type type = ((ParameterizedType) mySuperClass) .getActualTypeArguments()[index];
             return type;
         } catch (ClassCastException e) {
-            throw new ParseExection(
+            throw new ParseException(
                     "please use AnonymousInner Class to get generic Type");
         }
     }

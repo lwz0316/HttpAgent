@@ -10,7 +10,7 @@ public abstract class TextResponse implements Response {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-        onSuccess(statusCode,headers, data);
+        onSuccess(statusCode,headers, new String(data));
     }
 
     public abstract void onSuccess(int statusCode, Header[] headers, String data);

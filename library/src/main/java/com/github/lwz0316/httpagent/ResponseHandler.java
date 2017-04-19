@@ -14,17 +14,18 @@ public interface ResponseHandler<E, T> extends Response {
      * @param result
      * @param responseBody 服务器返回的原始结果
      */
-    public void onParseSuccess(T result, E responseBody);
+    void onParseSuccess(T result, E responseBody);
 
     /**
      * 解析异常
      * @param t
+     * @param responseBody 服务器返回的原始结果
      */
-    public void onParseError(Throwable t);
+    void onParseError(Throwable t, E responseBody);
 
     /**
      * 获取解析器
      * @return
      */
-    public Parser<E, T> getParser();
+    Parser<E, T> getParser();
 }

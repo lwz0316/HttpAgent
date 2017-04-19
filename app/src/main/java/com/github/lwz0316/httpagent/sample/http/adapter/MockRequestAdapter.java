@@ -1,6 +1,5 @@
 package com.github.lwz0316.httpagent.sample.http.adapter;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.github.lwz0316.httpagent.Header;
@@ -20,7 +19,7 @@ public class MockRequestAdapter implements RequestAdapter<StringBuffer> {
     StringBuffer sb = new StringBuffer();
 
     @Override
-    public void request(Context context, Object tag, boolean async, HttpMethod method, String url, Header[] headers, Map<String, ?> params, Response response) {
+    public void request(Object tag, boolean async, HttpMethod method, String url, Header[] headers, Map<String, ?> params, Response response) {
         this.tag = tag;
         Gson gson = new Gson();
         sb.append(method.toString())

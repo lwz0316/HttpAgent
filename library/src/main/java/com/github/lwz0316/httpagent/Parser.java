@@ -1,6 +1,6 @@
 package com.github.lwz0316.httpagent;
 
-import com.github.lwz0316.httpagent.exection.ParseExection;
+import com.github.lwz0316.httpagent.exection.ParseException;
 
 import java.lang.reflect.Type;
 
@@ -9,6 +9,6 @@ import java.lang.reflect.Type;
  */
 public interface Parser<E, T> {
 
-    T parse(E data, Type typeOfT) throws ParseExection;
+    T parse(E data, Type typeOfT) throws ParseException;
 
 }

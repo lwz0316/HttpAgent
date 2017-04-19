@@ -8,13 +8,13 @@ import android.widget.TextView;
 
 import com.github.lwz0316.httpagent.Header;
 import com.github.lwz0316.httpagent.HttpAgent;
-import com.github.lwz0316.httpagent.impl.JsonResponseHandler;
-import com.github.lwz0316.httpagent.sample.http.adapter.FormOkHttpAdapter;
+import com.github.lwz0316.httpagent.Parser;
+import com.github.lwz0316.httpagent.exection.ParseException;
+import com.github.lwz0316.httpagent.impl.ResponseParserHandler;
 import com.github.lwz0316.httpagent.sample.http.adapter.MockJsonRequestAdapter;
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Type;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,56 +29,20 @@ public class MainActivity extends AppCompatActivity {
 
         mConsole = (TextView) findViewById(R.id.console);
 
-
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("code", 1);
-        params.put("sex", "M");
-
-        HttpAgent.setDefaultRequestAdapter(new FormOkHttpAdapter());
-
-//        mAgent = new HttpAgent.Builder(this, "http://m.baidu.com")
-//                .header("multi", "header1")
-//                .header(new Header("multi", "header2"))
-//                .headers(new Header("multi", "header3"), new Header("multi", "header4"))
-//                .header(new Header("contentType", "application/json"))
-//                .header(new Header("charset", "utf-8"))
-//                .param("username", "lwz")
-//                .param("pwd", "xxxxxx")
-//                .params(params)
-//                .response(new Response() {
-//                    @Override
-//                    public void onStart() {
-//                        printLogToConsole("onStart ----");
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-//                        printLogToConsole("onSuccess ----");
-//                        printLogToConsole(statusCode);
-//                        printLogToConsole(formatHeader(headers));
-//                        printLogToConsole("RESPONSE DATA ----");
-//                        printLogToConsole(new String(data));
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable t) {
-//                        printLogToConsole("onError ----");
-//                        printLogToConsole(t);
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        printLogToConsole("onComplete ----");
-//                    }
-//                })
-//                .tag("TARGET").build();
-
+        HttpAgent.setDefaultRequestAdapter(new MockJsonRequestAdapter());
     }
 
     private HttpAgent createHttpAgent() {
-        return mAgent = new HttpAgent.Builder(this, "")
-                .requestAdapter(new MockJsonRequestAdapter())
-                .response(new JsonResponseHandler<People>() {
+        return mAgent = new HttpAgent.Builder("https://yesno.wtf/api")
+                .tag("TARGET")
+                .header("multi", "header1")
+                .header(new Header("multi", "header2"))
+                .headers(new Header("multi", "header3"), new Header("multi", "header4"))
+                .header(new Header("contentType", "application/json"))
+                .header(new Header("charset", "utf-8"))
+                .param("username", "lwz")
+                .param("pwd", "xxxxxx")
+                .response(new ResponseParserHandler<People>() {
 
                     @Override
                     public void onStart() {
@@ -97,15 +61,33 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onParseSuccess(People result, byte[] responseBody) {
-                        printLogToConsole("onParseSuccess ----");
-                        printLogToConsole(new Gson().toJson(result));
+                    public void onSuccess(int statusCode, Header[] headers, byte[] data) {
+                        printLogToConsole(formatHeader(headers));
+                        super.onSuccess(statusCode, headers, data);
                     }
 
                     @Override
-                    public void onParseError(Throwable t) {
+                    public void onParseSuccess(People result, byte[] responseBody) {
+                        printLogToConsole("onParseSuccess ---- ");
+                        printLogToConsole(new Gson().toJson(result));
+                        printLogToConsole(new String(responseBody));
+                    }
+
+                    @Override
+                    public void onParseError(Throwable t, byte[] responseBody) {
                         printLogToConsole("onParseError ----");
+                        printLogToConsole(new String(responseBody));
                         printLogToConsole(t);
+                    }
+
+                    @Override
+                    public Parser<byte[], People> getParser() {
+                        return new Parser<byte[], People>() {
+                            @Override
+                            public People parse(byte[] data, Type typeOfT) throws ParseException {
+                                return new Gson().fromJson(new String(data), typeOfT);
+                            }
+                        };
                     }
                 })
                 .build();
@@ -147,8 +129,10 @@ public class MainActivity extends AppCompatActivity {
 
     private String formatHeader(Header[] headers) {
         StringBuilder sb = new StringBuilder("HEADERS ----\n");
-        for (Header header : headers) {
-            sb.append(header.key).append(" : ").append(header.value);
+        if (headers != null) {
+            for (Header header : headers) {
+                sb.append(header.key).append(" : ").append(header.value).append("\n");
+            }
         }
         return sb.toString();
     }
